@@ -37,7 +37,7 @@ function Sidebar({ isOpen, onToggle }: SidebarProps) {
       {/* Navigation Links */}
       <ul className="flex flex-col gap-4">
         <SidebarLink href="/" text="Home" isOpen={isOpen} />
-        <SidebarLink href="/pcod" text="Predict PCOD" isOpen={isOpen} />
+        <SidebarLink href="/pcod_tracker" text="Predict PCOD" isOpen={isOpen} />
         <SidebarLink href="/menstrual_irregularity" text="Menstrual Irregularity" isOpen={isOpen} />
         <SidebarLink href="/education" text="Education" isOpen={isOpen} />
         <SidebarLink href="/get_doctors_nearby" text="Get Doctors nearby" isOpen={isOpen} />
