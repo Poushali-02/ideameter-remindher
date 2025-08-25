@@ -3,6 +3,7 @@ import Dashboard from "./Components/main/dashboard";
 import Welcome from "./Components/main/welcome";
 import PcodForm from "./Components/pcod/pcod";
 import MenstrualCycleDetector from "./Components/menstrual_cycle/menstrual";
+import GynaecologistFinder from "./Components/gynaecologists/GynaecologistFinder";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
 
@@ -23,6 +24,11 @@ const App: React.FC = () => {
         <Route path="menstrual_irregularity" element={
           <Dashboard>
             <MenstrualCycleDetector />
+          </Dashboard>
+        }/>
+        <Route path="get_doctors_nearby" element={
+          <Dashboard>
+            <GynaecologistFinder />
           </Dashboard>
         }/>
       </Routes>
