@@ -15,6 +15,62 @@ import Overlay from 'ol/Overlay';
 
 import { searchGynecologistsByPincode, type GynecologistData } from './api';
 
+const FullScreenLoader: React.FC = () => {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-95 backdrop-blur-sm">
+      <div className="text-center">
+        {/* Spinning Icon with Woman Gesture */}
+        <div className="relative">
+          {/* Outer spinning ring */}
+          <div className="w-20 h-20 border-4 border-pink-200 border-t-pink-500 rounded-full animate-spin mx-auto mb-4"></div>
+          
+          {/* Inner spinning ring */}
+          <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-r-purple-500 rounded-full animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+          
+          {/* Woman with thumbs up in center */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-12 h-12 flex items-center justify-center">
+              {/* Woman with thumbs up SVG */}
+              <svg 
+                className="w-8 h-8 text-pink-600 animate-pulse" 
+                fill="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                {/* Woman figure */}
+                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
+                <path d="M21 9V7L16 6V4C16 3.45 15.55 3 15 3S14 3.45 14 4V7L12 7.5L10 7V4C10 3.45 9.55 3 9 3S8 3.45 8 4V6L3 7V9L8 8V22H10V16H14V22H16V8L21 9Z"/>
+                
+                {/* Thumbs up gesture */}
+                <g transform="translate(18,4) scale(0.6)">
+                  <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        {/* Loading Text */}
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+          Finding Gynecologists
+        </h2>
+        <p className="text-gray-600">Searching healthcare facilities near you...</p>
+        
+        {/* Animated Dots */}
+        <div className="flex justify-center mt-4 space-x-1">
+          <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+          <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+          <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+        </div>
+        
+        {/* Progress Bar */}
+        <div className="mt-6 w-64 bg-gray-200 rounded-full h-2 mx-auto">
+          <div className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full animate-pulse" style={{ width: '70%' }}></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const GynaecologistFinder: React.FC = () => {
   // State management
   const [map, setMap] = useState<Map | null>(null);
@@ -201,11 +257,13 @@ const GynaecologistFinder: React.FC = () => {
   }
 };
   return (
+    <>
+    {loading && <FullScreenLoader />}
     <div className="max-w-6xl mx-auto p-6 space-y-8">
       {/* Header */}
       <div className="text-center">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
-          Find Gynecologists Near You
+          Find Gynaecologist Near You
         </h1>
         <p className="text-gray-600">Enter your pincode to find nearby women's healthcare providers</p>
       </div>
@@ -273,44 +331,63 @@ const GynaecologistFinder: React.FC = () => {
 
       {/* Results List */}
       {gynecologists.length > 0 && (
-        <div className="bg-white rounded-2xl shadow-xl border border-pink-100 p-6">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-4 flex items-center gap-3">
-            <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-            Found {gynecologists.length} Healthcare Facilities
-          </h2>
-          
+        <div className="bg-white rounded-2xl shadow-xl border border-pink-100 p-6">          
           <div className="grid gap-4">
-            {gynecologists.map((doctor) => (
-              <div key={doctor.id} className="border border-pink-100 rounded-xl p-4 hover:bg-pink-50 transition-colors">
+            {gynecologists.length === 0 && (
+              <p className="text-gray-600">No healthcare facilities found.</p>
+            )}
+            {gynecologists.length > 0 && (
+            <div className="bg-white rounded-2xl shadow-xl border border-pink-100 p-6">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-4 flex items-center gap-3">
+            <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+                Found {gynecologists.length} Healthcare Facilities
+                {gynecologists.length > 10 && <span className="text-sm font-normal text-gray-600">(Showing top 10)</span>}
+            </h2>
+    
+            <div className="grid gap-4">
+            {gynecologists.slice(0, 10).map((doctor) => (
+                <div key={doctor.id} className="border border-pink-100 rounded-xl p-4 hover:bg-pink-50 transition-colors">
                 <h3 className="font-bold text-lg text-purple-700">{doctor.name}</h3>
                 <p className="text-gray-600 mb-2">{doctor.address}</p>
                 
                 <div className="flex flex-wrap gap-4 text-sm">
-                  {doctor.phone && (
+                    {doctor.phone && (
                     <div className="flex items-center gap-1 text-green-600">
-                      <span>📞</span>
-                      <span>{doctor.phone}</span>
+                        <span>📞</span>
+                        <span>{doctor.phone}</span>
                     </div>
-                  )}
-                  {doctor.website && (
+                    )}
+                    {doctor.website && (
                     <div className="flex items-center gap-1 text-blue-600">
-                      <span>🌐</span>
-                      <a href={doctor.website} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                        <span>🌐</span>
+                        <a href={doctor.website} target="_blank" rel="noopener noreferrer" className="hover:underline">
                         Website
-                      </a>
+                        </a>
                     </div>
-                  )}
-                  {doctor.opening_hours && (
+                    )}
+                    {doctor.opening_hours && (
                     <div className="flex items-center gap-1 text-orange-600">
-                      <span>🕒</span>
-                      <span>{doctor.opening_hours}</span>
+                        <span>🕒</span>
+                        <span>{doctor.opening_hours}</span>
                     </div>
-                  )}
+                    )}
                 </div>
-              </div>
+                </div>
             ))}
+            </div>
+    
+    {gynecologists.length > 10 && (
+      <div className="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg text-center">
+        <p className="text-purple-700">
+          Showing 10 of {gynecologists.length} results. Try a more specific search for fewer results.
+        </p>
+      </div>
+    )}
+  </div>
+)}
+
           </div>
         </div>
       )}
@@ -351,6 +428,7 @@ const GynaecologistFinder: React.FC = () => {
         }
       `}</style>
     </div>
+    </>
   );
 };
 

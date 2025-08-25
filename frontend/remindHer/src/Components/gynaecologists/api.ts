@@ -123,7 +123,7 @@ export const findGynecologists = async (latitude: number, longitude: number): Pr
       node["amenity"="clinic"](around:10000,${latitude},${longitude});
       way["amenity"="hospital"](around:10000,${latitude},${longitude});
       way["amenity"="clinic"](around:10000,${latitude},${longitude});
-      node["name"~"gynec|women|maternity|obstetric",i](around:10000,${latitude},${longitude});
+      node["name"~"gynaecology|gynaecologist|women|maternity|obstetric",i](around:10000,${latitude},${longitude});
     );
     out center meta;
   `;
